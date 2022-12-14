@@ -5,21 +5,21 @@ export class LoggerService implements ILogger {
   private logger: Logger<void>;
 
   constructor() {
-    this.logger = new Logger({
+    this.logger = new Logger<void>({
       prettyLogTemplate:
         '{{yyyy}}.{{mm}}.{{dd}} {{hh}}:{{MM}}:{{ss}}:{{ms}}\t{{logLevelName}}\t',
     });
   }
 
-  public log(...args: unknown[]) {
+  public log(...args: unknown[]): void {
     this.logger.info(...args);
   }
 
-  public error(...args: unknown[]) {
+  public error(...args: unknown[]): void {
     this.logger.error(...args);
   }
 
-  public warn(...args: unknown[]) {
+  public warn(...args: unknown[]): void {
     this.logger.warn(...args);
   }
 }

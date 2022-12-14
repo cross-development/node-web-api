@@ -7,7 +7,7 @@ export { Router } from 'express';
 export abstract class BaseController {
   private readonly _router: Router;
 
-  constructor(private logger: ILogger) {
+  constructor(private readonly logger: ILogger) {
     this._router = Router();
   }
 
@@ -15,20 +15,23 @@ export abstract class BaseController {
     return this._router;
   }
 
-  private send<T>(res: Response, code: number, message: T) {
+  private send<T>(res: Response, code: number, message: T): void {
     res.type('application/json');
-    return res.status(code).json(message);
+    res.status(code).json(message);
+    return;
   }
 
-  protected ok<T>(res: Response, message: T) {
-    return this.send<T>(res, 200, message);
+  protected ok<T>(res: Response, message: T): void {
+    this.send<T>(res, 200, message);
+    return;
   }
 
-  protected created(res: Response) {
-    return res.sendStatus(201);
+  protected created(res: Response): void {
+    res.sendStatus(201);
+    return;
   }
 
-  protected bindRoutes(routes: IControllerRoute[]) {
+  protected bindRoutes(routes: IControllerRoute[]): void {
     for (const route of routes) {
       this.logger.log(`[${route.method}] ${route.path}`);
 
