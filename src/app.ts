@@ -1,10 +1,15 @@
+// Packages
+import 'reflect-metadata';
 import express, { Express } from 'express';
 import { injectable, inject } from 'inversify';
+
+// Controllers
 import { UserController } from './users/users.controller';
+
+// Interfaces and types
+import { TYPES } from './common/types';
 import { ILogger } from './logger/logger.interface';
 import { IExceptionFilter } from './errors/exception.filter.interface';
-import { TYPES } from './common/types';
-import 'reflect-metadata';
 
 @injectable()
 export class App {
