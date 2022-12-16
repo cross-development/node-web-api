@@ -1,41 +1,41 @@
 import { Response, Router } from 'express';
+import { injectable } from 'inversify';
 import { ILogger } from '../logger/logger.interface';
-import { IControllerRoute } from './route.interface';
+import { ExpressReturnType, IControllerRoute } from './route.interface';
+import 'reflect-metadata';
 
 export { Router } from 'express';
 
+@injectable()
 export abstract class BaseController {
-  private readonly _router: Router;
+	private readonly _router: Router;
 
-  constructor(private readonly logger: ILogger) {
-    this._router = Router();
-  }
+	constructor(private readonly logger: ILogger) {
+		this._router = Router();
+	}
 
-  get router(): Router {
-    return this._router;
-  }
+	get router(): Router {
+		return this._router;
+	}
 
-  private send<T>(res: Response, code: number, message: T): void {
-    res.type('application/json');
-    res.status(code).json(message);
-    return;
-  }
+	private send<T>(res: Response, code: number, message: T): ExpressReturnType {
+		res.type('application/json');
+		return res.status(code).json(message);
+	}
 
-  protected ok<T>(res: Response, message: T): void {
-    this.send<T>(res, 200, message);
-    return;
-  }
+	protected ok<T>(res: Response, message: T): ExpressReturnType {
+		return this.send<T>(res, 200, message);
+	}
 
-  protected created(res: Response): void {
-    res.sendStatus(201);
-    return;
-  }
+	protected created(res: Response): ExpressReturnType {
+		return res.sendStatus(201);
+	}
 
-  protected bindRoutes(routes: IControllerRoute[]): void {
-    for (const route of routes) {
-      this.logger.log(`[${route.method}] ${route.path}`);
+	protected bindRoutes(routes: IControllerRoute[]): void {
+		for (const route of routes) {
+			this.logger.log(`[${route.method}] ${route.path}`);
 
-      this.router[route.method](route.path, route.func.bind(this));
-    }
-  }
+			this.router[route.method](route.path, route.func.bind(this));
+		}
+	}
 }
