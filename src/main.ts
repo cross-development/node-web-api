@@ -7,6 +7,7 @@ import { App } from './app';
 // Services
 import { UserService } from './users/users.service';
 import { LoggerService } from './logger/logger.service';
+import { ConfigService } from './config/config.service';
 
 // Controllers
 import { UserController } from './users/users.controller';
@@ -17,6 +18,7 @@ import { ExceptionFilter } from './errors/exception.filter';
 // Interfaces and types
 import { TYPES } from './common/types';
 import { ILogger } from './logger/logger.interface';
+import { IConfigService } from './config/config.service.interface';
 import { IExceptionFilter } from './errors/exception.filter.interface';
 import { IUserController, IUserService } from './users/users.interfaces';
 
@@ -26,11 +28,16 @@ export interface IBootstrapReturn {
 }
 
 export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
-	bind<ILogger>(TYPES.ILogger).to(LoggerService);
-	bind<IExceptionFilter>(TYPES.IExceptionFilter).to(ExceptionFilter);
-	bind<IUserController>(TYPES.IUserController).to(UserController);
-	bind<IUserService>(TYPES.IUserService).to(UserService);
-	bind<App>(TYPES.Application).to(App);
+	// Services
+	bind<ILogger>(TYPES.ILogger).to(LoggerService).inSingletonScope();
+	bind<IUserService>(TYPES.IUserService).to(UserService).inSingletonScope();
+	bind<IConfigService>(TYPES.IConfigService).to(ConfigService).inSingletonScope();
+	// Filters
+	bind<IExceptionFilter>(TYPES.IExceptionFilter).to(ExceptionFilter).inSingletonScope();
+	// Controllers
+	bind<IUserController>(TYPES.IUserController).to(UserController).inSingletonScope();
+	// App
+	bind<App>(TYPES.Application).to(App).inSingletonScope();
 });
 
 const bootstrap = (): IBootstrapReturn => {
