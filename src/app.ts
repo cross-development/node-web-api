@@ -1,5 +1,6 @@
 // Packages
 import 'reflect-metadata';
+import { json } from 'body-parser';
 import express, { Express } from 'express';
 import { injectable, inject } from 'inversify';
 
@@ -26,10 +27,15 @@ export class App {
 	}
 
 	public async init(): Promise<void> {
+		this.useMiddleware();
 		this.useRoutes();
 		this.useExceptionFilters();
 
 		this.listen();
+	}
+
+	private useMiddleware(): void {
+		this.app.use(json());
 	}
 
 	private useRoutes(): void {
