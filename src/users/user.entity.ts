@@ -6,15 +6,15 @@ export class User {
 
 	constructor(private readonly _email: string, private readonly _name: string) {}
 
-	get email(): string {
+	public get email(): string {
 		return this._email;
 	}
 
-	get name(): string {
+	public get name(): string {
 		return this._name;
 	}
 
-	get password(): string {
+	public get password(): string {
 		return this._password;
 	}
 

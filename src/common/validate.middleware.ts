@@ -9,7 +9,7 @@ import { IMiddleware } from './middleware.interface';
 export class ValidateMiddleware implements IMiddleware {
 	constructor(private readonly classToValidate: ClassConstructor<object>) {}
 
-	execute(req: Request, res: Response, next: NextFunction): void {
+	public execute(req: Request, res: Response, next: NextFunction): void {
 		const instance = plainToInstance(this.classToValidate, req.body);
 
 		validate(instance).then((errors: ValidationError[]) => {

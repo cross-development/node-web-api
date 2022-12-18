@@ -1,5 +1,4 @@
 // Packages
-import 'reflect-metadata';
 import { injectable, inject } from 'inversify';
 import { NextFunction, Response } from 'express';
 
@@ -30,12 +29,12 @@ export class UserController extends BaseController implements IUserController {
 		super(loggerService);
 
 		this.bindRoutes([
-			{ path: 'login', method: 'post', func: this.login, middleware: [new ValidateMiddleware(UserLoginDto)] },
-			{ path: 'register', method: 'post', func: this.register, middleware: [new ValidateMiddleware(UserRegisterDto)] },
+			{ path: '/login', method: 'post', func: this.login, middleware: [new ValidateMiddleware(UserLoginDto)] },
+			{ path: '/register', method: 'post', func: this.register, middleware: [new ValidateMiddleware(UserRegisterDto)] },
 		]);
 	}
 
-	public login(req: UserRequestType<UserLoginDto>, res: Response, next: NextFunction): void {
+	public async login(req: UserRequestType<UserLoginDto>, res: Response, next: NextFunction): Promise<void> {
 		next(new HTTPError(401, 'Auth error'));
 	}
 
@@ -46,8 +45,6 @@ export class UserController extends BaseController implements IUserController {
 			return next(new HTTPError(422, 'User is already exists'));
 		}
 
-		const response = { email: result.email };
-
-		this.ok(res, response);
+		this.ok(res, { email: result.email, id: result.id });
 	}
 }

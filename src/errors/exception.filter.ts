@@ -1,5 +1,4 @@
 // Packages
-import 'reflect-metadata';
 import { injectable, inject } from 'inversify';
 import { NextFunction, Request, Response } from 'express';
 

@@ -1,4 +1,5 @@
 // Packages
+import { UserModel } from '.prisma/client';
 import { NextFunction, Request, Response } from 'express';
 
 // Entities
@@ -16,6 +17,11 @@ export interface IUserController {
 }
 
 export interface IUserService {
-	createUser(dto: UserRegisterDto): Promise<User | null>;
+	createUser(dto: UserRegisterDto): Promise<UserModel | null>;
 	validateUser(dto: UserLoginDto): Promise<boolean>;
+}
+
+export interface IUserRepository {
+	create(user: User): Promise<UserModel>;
+	find(email: string): Promise<UserModel | null>;
 }

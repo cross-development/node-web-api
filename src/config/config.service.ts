@@ -1,6 +1,7 @@
 // Packages
 import { inject, injectable } from 'inversify';
 import { config, DotenvConfigOutput, DotenvParseOutput } from 'dotenv';
+
 // Interfaces and types
 import { TYPES } from '../common/types';
 import { ILogger } from '../logger/logger.interface';
@@ -22,7 +23,7 @@ export class ConfigService implements IConfigService {
 		}
 	}
 
-	get(key: string): string {
+	public get(key: string): string {
 		return this.config[key];
 	}
 }

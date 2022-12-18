@@ -1,5 +1,4 @@
 // Packages
-import 'reflect-metadata';
 import { Logger } from 'tslog';
 import { injectable } from 'inversify';
 
