@@ -1,5 +1,4 @@
 // Packages
-import 'reflect-metadata';
 import { injectable } from 'inversify';
 import { Response, Router } from 'express';
 

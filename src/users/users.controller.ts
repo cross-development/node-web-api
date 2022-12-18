@@ -35,14 +35,20 @@ export class UserController extends BaseController implements IUserController {
 	}
 
 	public async login(req: UserRequestType<UserLoginDto>, res: Response, next: NextFunction): Promise<void> {
-		next(new HTTPError(401, 'Auth error'));
+		const result = await this.userService.validateUser(req.body);
+
+		if (!result) {
+			return next(new HTTPError(401, 'Auth error', 'login'));
+		}
+
+		this.ok(res, {});
 	}
 
 	public async register(req: UserRequestType<UserRegisterDto>, res: Response, next: NextFunction): Promise<void> {
 		const result = await this.userService.createUser(req.body);
 
 		if (!result) {
-			return next(new HTTPError(422, 'User is already exists'));
+			return next(new HTTPError(422, 'User is already exists', 'register'));
 		}
 
 		this.ok(res, { email: result.email, id: result.id });

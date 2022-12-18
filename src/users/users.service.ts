@@ -39,6 +39,16 @@ export class UserService implements IUserService {
 	}
 
 	public async validateUser(dto: UserLoginDto): Promise<boolean> {
-		return true;
+		const { email, password } = dto;
+
+		const existedUser = await this.userRepository.find(email);
+
+		if (!existedUser) {
+			return false;
+		}
+
+		const newUser = new User(existedUser.email, existedUser.name, existedUser.password);
+
+		return newUser.comparePassword(password);
 	}
 }
