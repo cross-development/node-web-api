@@ -10,9 +10,13 @@ import { PrismaService } from './database/prisma.service';
 // Controllers
 import { UserController } from './users/users.controller';
 
+// Middleware
+import { AuthMiddleware } from './common/auth.middleware';
+
 // Interfaces and types
 import { TYPES } from './common/types';
 import { ILogger } from './logger/logger.interface';
+import { IConfigService } from './config/config.service.interface';
 import { IExceptionFilter } from './errors/exception.filter.interface';
 
 @injectable()
@@ -24,6 +28,7 @@ export class App {
 	constructor(
 		@inject(TYPES.ILogger) private readonly logger: ILogger,
 		@inject(TYPES.PrismaService) private readonly prismaService: PrismaService,
+		@inject(TYPES.IConfigService) private readonly configService: IConfigService,
 		@inject(TYPES.IUserController) private readonly userController: UserController,
 		@inject(TYPES.IExceptionFilter) private readonly exceptionFilter: IExceptionFilter,
 	) {
@@ -42,6 +47,9 @@ export class App {
 
 	private useMiddleware(): void {
 		this.app.use(json());
+
+		const authMiddleware = new AuthMiddleware(this.configService.get('SECRET'));
+		this.app.use(authMiddleware.execute.bind(authMiddleware));
 	}
 
 	private useRoutes(): void {

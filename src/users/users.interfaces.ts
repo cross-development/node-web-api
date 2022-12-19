@@ -14,11 +14,13 @@ export type UserRequestType<T> = Request<{}, {}, T>;
 export interface IUserController {
 	login(req: Request, res: Response, next: NextFunction): void;
 	register(req: Request, res: Response, next: NextFunction): void;
+	info(req: Request, res: Response, next: NextFunction): void;
 }
 
 export interface IUserService {
 	createUser(dto: UserRegisterDto): Promise<UserModel | null>;
 	validateUser(dto: UserLoginDto): Promise<boolean>;
+	getUserInfo(email: string): Promise<UserModel | null>;
 }
 
 export interface IUserRepository {
